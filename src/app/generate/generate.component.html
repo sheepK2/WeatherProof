@@ -1,0 +1,51 @@
+<div class="container">
+
+    <div class="csv-file-chooser">
+        <p class="p1">Upload a CSV file:</p>
+        <input type="file" accept=".csv" #fileImportInput name="File Upload" id="csvFileUpload"
+        (change)="fileChangeListener($event)" (click)="askInputFile()"/>
+    </div>
+
+    <div class="date-input">
+        <p>Enter a date:</p>
+        <input [ngModel]="startDate | date:'yyyy-MM-dd'" (ngModelChange)="startDate = $event" (change)="dateChangeListener($event)" type="date" name="startDate"/>
+    </div>
+
+    <div class="generate-btn">
+        <input class="btn btn-primary" type="submit" value="What's their weather for this day?" (click)="generate()">
+    </div>
+
+    <table class="table table-striped table-dark">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>City</th>
+            <th>Weather</th>
+          </tr>
+        </thead>
+        <tbody *ngIf = "showTable">
+          <tr *ngFor = "let csvData of csvRecords; let i = index;">
+            <td>
+              {{ i + 1 }}
+              <img src = {{images[i]}}/>
+            </td>
+            <td>
+              <span> {{ csvData["name.title"] }} {{ csvData["name.first"] }} {{ csvData["name.last"] }}</span>
+            </td>
+            <td>
+              <span>{{ csvData.phone }}</span>
+            </td>
+            <td>
+              <span>{{ csvData["location.city"] }}, {{ csvData["location.country"] }}</span>
+            </td>
+            <td>
+            <!-- <span>{{ getWeatherData(csvData["location.city"]), startDate | async }}</span> -->
+            <span>{{ weatherDataText[i] }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+</div>

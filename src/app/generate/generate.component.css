@@ -1,0 +1,27 @@
+:host {
+    text-align: center;
+}
+
+.csv-file-chooser {
+    display: inline-block;
+    padding: 20px;
+}
+
+.p1 {
+    text-align: center;
+    width: 184px;
+}
+
+.date-input {
+    display: inline-block;
+    padding: 20px;
+}
+
+.generate-btn {
+    padding: 20px;
+}
+
+img {
+    border-radius: 50px;
+    padding: 15px;
+}
