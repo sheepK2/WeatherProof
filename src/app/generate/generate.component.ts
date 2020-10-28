@@ -47,6 +47,7 @@ export class GenerateComponent implements OnInit {
     // console.log("Validating date...");
     this.validDate = true;
     this.weatherDataText = [];
+    this.weatherDataIcon = [];
 
     let dateString = this.startDate;
     let dateNumber = new Date(dateString); 
@@ -71,6 +72,7 @@ export class GenerateComponent implements OnInit {
     this.cities = [];
     this.validFile = true;
     this.weatherDataText = [];
+    this.weatherDataIcon = [];
     this.csvProperties = [];
     this.images = [];
  
@@ -155,7 +157,7 @@ export class GenerateComponent implements OnInit {
 
   generate(): void {
     // console.log("Generate Data...");
-    
+
     // If no file input
     if (this.csvFile.length == 0) {
       window.alert("Can't generate! No CSV file uploaded.");

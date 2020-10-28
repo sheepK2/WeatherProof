@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "weatherproof-angular"
+  },
+  "targets": {
+    "weatherproof-angular": {
+      "hosting": {
+        "weather-proof": [
+          "weatherproof-angular"
+        ]
+      }
+    }
+  }
+}
