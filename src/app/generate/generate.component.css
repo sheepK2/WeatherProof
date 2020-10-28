@@ -21,7 +21,17 @@
     padding: 20px;
 }
 
-img {
+.avatar {
     border-radius: 50px;
     padding: 15px;
 }
+
+td{
+    vertical-align:middle;
+ }
+
+ @media (min-width: 1200px) {
+     .container {
+         max-width: 1400px;
+     }
+ }

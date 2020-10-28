@@ -4,8 +4,7 @@ import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { DatePipe } from '@angular/common';
 
 import { WeatherApiService } from '../services/weather-api.service';
-// import { WeatherApiResponse } from '../services/payloads/weather-api-response';
-// import { Observable } from 'rxjs';
+import { WeatherApiResponse } from '../services/payloads/weather-api-response';
 
 @Component({
   selector: 'app-generate',
@@ -13,6 +12,7 @@ import { WeatherApiService } from '../services/weather-api.service';
   styleUrls: ['./generate.component.css']
 })
 export class GenerateComponent implements OnInit {
+
 
   constructor(private ngxCsvParser: NgxCsvParser,
               private datePipe: DatePipe,
@@ -34,8 +34,8 @@ export class GenerateComponent implements OnInit {
   date = new Date();
   startDate = this.datePipe.transform(this.date,"yyyy-MM-dd");
 
-  // weatherData: WeatherApiResponse;
   weatherDataText: string[] = [];
+  weatherDataIcon: string[] = [];
 
   csvProperties: string[] = [];
 
@@ -98,38 +98,39 @@ export class GenerateComponent implements OnInit {
       });
   }
 
-  getWeatherData() {
+  // WORKING BUT SLOW!
+  async getWeatherData(): Promise<void> {
     this.weatherDataText = [];
+    this.weatherDataIcon = [];
     for (let i of this.cities) {
-      this.weatherService.getWeather(i, this.startDate).subscribe(
-        res => {
-          this.weatherDataText.push(res.forecast.forecastday[0].day.condition.text);
-          console.log(this.weatherDataText.length);
-          // console.log(this.weatherDataText[]);
-        },
-        err => {
-          console.log(err);
-          if (err.error.error.code == 1006) {
-            console.log("Error part");
-            console.log(i);
-            this.weatherDataText.push("Error: Location not found in API service");
-            console.log(this.weatherDataText.length);
-            // console.log(this.weatherDataText[]);
-          }
-          else {
-            this.weatherDataText.push("Error: DATA NOT FOUND.");
-            console.log(this.weatherDataText.length);
-            // console.log(this.weatherDataText[]);
-          }
+      let result: WeatherApiResponse;
+      try {
+        result = await this.weatherService.getWeather(i, this.startDate).toPromise();
+        this.weatherDataText.push(result.forecast.forecastday[0].day.condition.text);
+        this.weatherDataIcon.push(result.forecast.forecastday[0].day.condition.icon);
+      } catch (error) {
+        if (error.error.error.code == 1006) {
+          this.weatherDataText.push("ERROR: Location not found in API service");
+          this.weatherDataIcon.push("https://img.icons8.com/cotton/64/000000/database-error.png");
         }
-      );
+        else {
+          this.weatherDataText.push("ERROR: DATA NOT FOUND");
+          this.weatherDataIcon.push("https://img.icons8.com/cotton/64/000000/database-error.png");
+        }
+      }
     }
   }
 
-  // getWeatherData(x: string, y: string): string {
-  //   let result: string;
-  //   this.weatherService.getWeather(x, y).subscribe(res => result = res.forecast.forecastday[0].day.condition.text);
-  //   return(result);
+  // NOT WORKING BUT WILL DEFINITELY OPTIMIZED THE FLOW
+  // async getWeatherA(city: string, date: string): Promise<string> {
+  //   let weather: WeatherApiResponse;
+  //   try {
+  //     weather = await this.weatherService.getWeather(city, date).toPromise();
+  //     return weather.forecast.forecastday[0].day.condition.text;
+  //   }
+  //   catch {
+  //     return "ERROR";
+  //   }
   // }
 
   checkCsvFileFormat(): boolean {
@@ -153,7 +154,8 @@ export class GenerateComponent implements OnInit {
   }
 
   generate(): void {
-    console.log("Generate Data...");
+    // console.log("Generate Data...");
+    
     // If no file input
     if (this.csvFile.length == 0) {
       window.alert("Can't generate! No CSV file uploaded.");
@@ -174,10 +176,10 @@ export class GenerateComponent implements OnInit {
       window.alert("Please input date within the last 7 days.");
     }
     else {
-      console.log(this.cities);
-      console.log(this.startDate);
+      // console.log(this.cities);
+      // console.log(this.startDate);
       this.getWeatherData();
-      console.log(this.weatherDataText);
+      // console.log(this.weatherDataText);
       this.showTable = true;
     }
   }

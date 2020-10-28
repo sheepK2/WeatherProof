@@ -29,7 +29,7 @@
           <tr *ngFor = "let csvData of csvRecords; let i = index;">
             <td>
               {{ i + 1 }}
-              <img src = {{images[i]}}/>
+              <img class="avatar" src = {{images[i]}}/>
             </td>
             <td>
               <span> {{ csvData["name.title"] }} {{ csvData["name.first"] }} {{ csvData["name.last"] }}</span>
@@ -41,8 +41,9 @@
               <span>{{ csvData["location.city"] }}, {{ csvData["location.country"] }}</span>
             </td>
             <td>
-            <!-- <span>{{ getWeatherData(csvData["location.city"]), startDate | async }}</span> -->
-            <span>{{ weatherDataText[i] }}</span>
+              <img src = {{weatherDataIcon[i]}}/>
+              <!-- <span>{{ getWeatherA(csvData["location.city"], startDate) }}</span> -->
+              <span>{{ weatherDataText[i] }}</span>
             </td>
           </tr>
         </tbody>
